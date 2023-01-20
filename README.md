@@ -4,7 +4,9 @@ version 0.0.1
 
 ## How to use
 
-Clone this repo or get the zip.
+This is for Raspberry Pi 3. You may need to modify the image name in Makefile and scripts to make it work on other platforms.
+
+Clone this repo or get the zip. 
 
 ### Pre-requisites
 
@@ -24,15 +26,15 @@ Copy the files in this cloned directory to your installation dir. Do not copy .g
 
     make run
 
-#### Stop a container
+#### Stop the container
 
     make stop
 
-#### Start a stopped container
+#### Start the stopped container
 
     make start
 
-#### Restart a container
+#### Restart the container
 
     make restart
 
