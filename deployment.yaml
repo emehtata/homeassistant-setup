@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassistant-deployment
+  namespace: homeassistant
+spec:
+  selector:
+    matchLabels:
+      app: homeassistant
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      containers:
+      - name: homeassistant
+        image: homeassistant/home-assistant:latest
+        imagePullPolicy: IfNotPresent # Always
+        resources:
+          requests:
+            memory: "256Mi"
+          limits:
+            memory: "512Mi"
+        ports:
+        - containerPort: 8123
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+        - name: dbus-volume
+          mountPath: /run/dbus
+          readOnly: true
+        securityContext:
+          privileged: true
+      volumes:
+      - name: config-volume
+        hostPath:
+          path: /opt/homeassistant/config
+      - name: dbus-volume
+        hostPath:
+          path: /run/dbus
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+

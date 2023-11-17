@@ -7,7 +7,7 @@ fi
 
 . ./secrets
 
-IMAGE="ghcr.io/home-assistant/raspberrypi3-homeassistant:stable"
+IMAGE="ghcr.io/home-assistant/homeassistant:stable"
 curver=$(curl -s -X GET -H "$AUTH" $MY_HA_API/api/states/sensor.current_version | jq '.state')
 
 cd $(dirname $0) || exit

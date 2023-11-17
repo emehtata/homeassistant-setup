@@ -1,10 +1,10 @@
 # Home Assistant setup and backup utils
 
-version 0.0.1
+version 0.1.0
 
 ## How to use
 
-This is for Raspberry Pi 3. You may need to modify the image name in Makefile and scripts to make it work on other platforms.
+This has been tested with Raspberry Pi 3 (docker) and amd64 pc (docker/kubernetes/helm).
 
 Clone this repo or get the zip. 
 
@@ -20,7 +20,9 @@ Docker must be installed and configured properly.
 
 Copy the files in this cloned directory to your installation dir. Do not copy .git subdir.
 
-### Initial setup
+## Docker
+
+### Makefile
 
 #### Run Home Assistant in a container for first time:
 
@@ -41,7 +43,7 @@ Copy the files in this cloned directory to your installation dir. Do not copy .g
 #### Check running status
 
     make status
-    
+
 ### Update
 
 * Modify your Home Assistant API key (YOUR_HA_API_TOKEN) in `secrets`.
@@ -53,7 +55,7 @@ Copy the files in this cloned directory to your installation dir. Do not copy .g
     make upgrade
 
 or
-    
+
     bash run.sh update
 
 #### Clean unused images
@@ -74,3 +76,32 @@ or
 
     bash backup.sh
 
+## Kubernetes
+
+Edit `deployment.yaml`. Check hostPaths.
+
+### Install
+
+kubectl create ns homeassistant
+
+kubectl apply -f deployment.yaml
+
+### Uninstall
+
+kubectl delete -f deployment.yaml
+
+## Helm
+
+Edit `helm-chart/values.yaml`. Check hostPath value.
+
+### Install
+
+kubectl create ns homeassistant
+
+helm install homeassistant helm-chart -n homeassistant
+
+### Uninstall
+
+helm uninstall homeassistant -n homeassistant
+
+kubectl delete ns homeassistant

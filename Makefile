@@ -1,5 +1,5 @@
 NAME=homeassistant
-IMAGE="ghcr.io/home-assistant/raspberrypi3-homeassistant:stable"
+IMAGE="homeassistant/home-assistant:stable"
 
 all: help
 

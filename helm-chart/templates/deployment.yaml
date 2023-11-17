@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-chart.fullname" . }}-homeassistant-deployment
+  labels:
+  {{- include "helm-chart.labels" . | nindent 4 }}
+  namespace: homeassistant
+spec:
+  replicas: {{ .Values.homeassistantDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: homeassistant
+    {{- include "helm-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+      {{- include "helm-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.homeassistantDeployment.homeassistant.image.repository }}:{{
+          .Values.homeassistantDeployment.homeassistant.image.tag | default .Chart.AppVersion
+          }}
+        imagePullPolicy: {{ .Values.homeassistantDeployment.homeassistant.imagePullPolicy
+          }}
+        name: homeassistant
+        ports:
+        - containerPort: 8123
+        resources: {{- toYaml .Values.homeassistantDeployment.homeassistant.resources |
+          nindent 10 }}
+        securityContext: {{- toYaml .Values.homeassistantDeployment.homeassistant.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+        - mountPath: /run/dbus
+          name: dbus-volume
+          readOnly: true
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      volumes:
+      - hostPath:
+          path: {{ .Values.configHostPath }} # /opt/homeassistant/config
+        name: config-volume
+      - hostPath:
+          path: /run/dbus
+        name: dbus-volume

@@ -1,0 +1,17 @@
+homeassistantDeployment:
+  homeassistant:
+    containerSecurityContext:
+      privileged: true
+    image:
+      repository: homeassistant/home-assistant
+      tag: latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        memory: 256Mi
+  replicas: 1
+kubernetesClusterDomain: cluster.local
+
+configHostPath: /opt/homeassistant/config
